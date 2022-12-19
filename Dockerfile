@@ -29,20 +29,20 @@ ENV MSSQL_PID="Developer"
 
 USER root
 
+RUN mkdir -p /sakila
+WORKDIR /sakila
 
-RUN mkdir -p /app
-WORKDIR /app
-
-COPY . /app
+COPY . /sakila
 # Grant permissions for the import-data script to be executable
-RUN chmod +x /app/import-data.sh
+RUN chmod +x /sakila/import-data.sh
+RUN chmod +x /sakila/startit.sh
 
 # Get the compiled sqlcmd binary from builder
 RUN mkdir -p /opt/mssql-tools/bin
 COPY --from=sqlcmd_builder /go/bin/sqlcmd /opt/mssql-tools/bin/sqlcmd
 RUN chmod +x /opt/mssql-tools/bin/sqlcmd
 
-RUN chmod -R 777 /app
+RUN chmod -R 777 /sakila
 
 ENV PATH="$PATH:/opt/mssql-tools/bin"
 
@@ -54,6 +54,60 @@ COPY ./1-sql-server-sakila-schema.sql ./step_1.sql
 COPY ./2-sql-server-sakila-insert-data.sql ./step_2.sql
 COPY ./3-sql-server-sakila-user.sql ./step_3.sql
 
-# Switch back to mssql user and run the entrypoint script
+
+
 USER mssql
-ENTRYPOINT /bin/bash ./entrypoint.sh
+
+# Switch back to mssql user and run the entrypoint script
+
+#RUN bash ./import-data.sh &
+
+RUN ./startit.sh
+
+#RUN printf "\n\n Starting sqlservr \n\n"
+#
+#RUN /opt/mssql/bin/sqlservr
+
+RUN printf "\n\n prob exiting "
+
+
+#CMD ["/opt/mssql/bin/sqlservr"]
+
+
+
+
+
+
+
+FROM mcr.microsoft.com/azure-sql-edge:1.0.6 AS sakila-final
+
+RUN echo "huzzah on the new job"
+
+ENV ACCEPT_EULA="Y"
+ENV SA_PASSWORD="p_ssW0rd"
+ENV MSSQL_SA_PASSWORD="p_ssW0rd"
+#ENV ENV_MSSQL_AGENT_ENABLED="TRUE"
+ENV MSSQL_PID="Developer"
+
+USER root
+RUN mkdir -p /sakila
+WORKDIR /sakila
+
+COPY --from=sakila-base /sakila/sakila.bak /sakila/sakila.bak
+
+# Get the compiled sqlcmd binary from builder
+RUN mkdir -p /opt/mssql-tools/bin
+COPY --from=sakila-base /opt/mssql-tools/bin/sqlcmd /opt/mssql-tools/bin/sqlcmd
+RUN chmod +x /opt/mssql-tools/bin/sqlcmd
+
+RUN chmod -R 777 /sakila
+
+ENV PATH="$PATH:/opt/mssql-tools/bin"
+
+RUN sqlcmd --version
+
+EXPOSE 1433
+
+USER mssql
+
+CMD ["/opt/mssql/bin/sqlservr"]
