@@ -2,7 +2,6 @@ FROM mcr.microsoft.com/azure-sql-edge:1.0.6 AS sakila-base
 ENV ACCEPT_EULA="Y"
 ENV SA_PASSWORD="p_ssW0rd"
 ENV MSSQL_SA_PASSWORD="p_ssW0rd"
-#ENV ENV_MSSQL_AGENT_ENABLED="TRUE"
 ENV MSSQL_PID="Developer"
 
 USER root
@@ -12,7 +11,7 @@ WORKDIR /sakila
 COPY . /sakila
 RUN chmod -R 777 /sakila
 
-# Install sqlcmd, because it's not pre-installed for some reason
+# Install sqlcmd, because it's not pre-installed.
 RUN apt update -y
 RUN apt install -y sudo curl git gnupg2 software-properties-common
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
