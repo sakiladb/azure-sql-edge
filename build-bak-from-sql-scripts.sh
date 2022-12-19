@@ -8,9 +8,9 @@
 set -e
 #set -x
 
-container_name="azuresqledge-$(echo $RANDOM | md5sum | head -c 8)"
-echo "container: ${container_name}"
-
+export SQLCMDPASSWORD="p_ssW0rd"
+container_name="azure-sql-edge-$(echo $RANDOM | md5sum | head -c 8)"
+echo "Using container named: ${container_name}"
 
 cat ./1-sql-server-sakila-schema.sql ./2-sql-server-sakila-insert-data.sql ./3-sql-server-sakila-user.sql > ./init-db-full.sql
 
@@ -20,20 +20,13 @@ docker run -d --cap-add SYS_PTRACE -v $(pwd):/sakila \
 
 sleep 5
 
-#while [ "$(docker inspect -f {{.State.Status}} "$container_name")" != "running" ]; do     sleep 1; echo "x"; done
-
-
-printf "\n\n\n\nBuilding Sakila DB via SQL scripts....\n\nThis could take a while..\n\n";
-
-#cat ./init-db-full.sql
-
-export SQLCMDPASSWORD="p_ssW0rd"
+printf "\n\nBuilding Sakila DB via SQL scripts....\n\n"
+printf "This could take several minutes, and you may see errors that are to be ignored.\n\n";
 
 set +e
 
 for i in {1..50};
 do
-  echo "harrrooo"
   sqlcmd -S localhost -U sa -i ./init-db-full.sql
   if [ $? -eq 0 ]; then
     printf "\n\nSakila DB imported\n\n"
@@ -46,17 +39,18 @@ done
 
 set -e
 
-printf "\n\nStarting backup...\n"
+printf "\n\nBuilding backup in container...\n"
 
 sqlcmd -S localhost -U sa -Q "BACKUP DATABASE [sakila] TO DISK = N'/sakila/sakila.bak' WITH NOFORMAT, NOINIT, NAME = 'sakila-full', SKIP, NOREWIND, NOUNLOAD, STATS = 10"
 
-echo "Copying backup to $(pwd)/sakila.bak"
+echo "Copying backup from container to $(pwd)/sakila.bak"
 
-docker cp -v "$container_name":/sakila/sakila.bak ./sakila.bak
+docker cp "$container_name":/sakila/sakila.bak ./sakila.bak
 
-echo "Getting rid of container: $container_name"
+echo "Stopping container: $container_name"
 docker rm -f "$container_name"
-echo "Exiting"
+
+printf "\n\nSuccess!\n"
 
 
 #run the setup script to create the DB and the schema in the DB
