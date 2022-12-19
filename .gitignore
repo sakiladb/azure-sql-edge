@@ -16,3 +16,4 @@
 
 *.iml
 /docker-run.sh
+init-db-full.sql

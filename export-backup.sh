@@ -27,7 +27,7 @@ done
 printf "\n\n Huzzah! Data is imported from SQL files \n\n"
 
 
-sqlcmd -S localhost -U SA -Q "BACKUP DATABASE [sakila] TO DISK = N'/sakila/sakila.bak' WITH NOFORMAT, NOINIT, NAME = 'sakila-full', SKIP, NOREWIND, NOUNLOAD, STATS = 10"
+sqlcmd -S localhost -U sa -Q "BACKUP DATABASE [sakila] TO DISK = N'/sakila/sakila.bak' WITH NOFORMAT, NOINIT, NAME = 'sakila-full', SKIP, NOREWIND, NOUNLOAD, STATS = 10"
 
 printf "\n\n Huzzah! Data is dumped to /sakila/sakila.bak \n\n"
 
