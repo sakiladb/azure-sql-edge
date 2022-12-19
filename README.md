@@ -47,9 +47,7 @@ $ sqlcmd -S localhost -U sakila -d sakila -Q 'select * from actor'
         5 | JOHNNY     | LOLLOBRIGIDA | 2006-02-15 04:34:33
 ```
 
-# How to build/release the image
-
-To build the image:
+## How to build/release the image
 
 ```shell
 $ docker build . -t sakiladb/azure-sql-edge:latest
@@ -60,3 +58,12 @@ $ docker run sakiladb/azure-sql-edge:latest
 # Then push to docker hub (requires credentials)
 $ docker push sakiladb/azure-sql-edge:latest sakiladb/azure-sql-edge:latest
 ```
+
+## Regenerate sakila.bak
+
+When the container starts, it loads data from `sakila.bak`. However, the
+canonical DB is from the concatenation of the three numbered SQL files
+([1-sql-server-sakila-schema.sql](1-sql-server-sakila-schema.sql), etc.). If
+for some reason that `sakila.bak` file needs to be regenerated, use
+[restore-from-bak.sh](restore-from-bak.sh), and then commit the updated
+`sakila.bak` to version control.
