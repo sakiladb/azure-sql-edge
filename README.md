@@ -29,14 +29,15 @@ docker logs will show:
 sakiladb/azure-sql-edge has successfully initialized.
 ```
 
-Note that even after this message is logged, it may take another few moments for
-it to become available (due to a final server restart etc).
+Note that even after this message is logged, it could take another few moments for
+it to become available (due to a final server restart etc.).
 
 If you have [sqlcmd](https://docs.microsoft.com/en-us/sql/tools/sqlcmd-utility) installed
 locally, verify that all is well:
 
 ```shell script
-$ sqlcmd -S localhost -U sakila -P p_ssW0rd -d sakila -Q 'select * from actor'
+$ export SQLCMDPASSWORD="p_ssW0rd"
+$ sqlcmd -S localhost -U sakila -d sakila -Q 'select * from actor'
  actor_id | first_name |  last_name   |     last_update
 ----------+------------+--------------+---------------------
         1 | PENELOPE   | GUINESS      | 2006-02-15 04:34:33
@@ -54,7 +55,8 @@ To build the image:
 $ docker build . -t sakiladb/azure-sql-edge:latest
 
 # Then test the image via:
-$ docker run sakiladb/azure-sql-edge:lastest
+$ docker run sakiladb/azure-sql-edge:latest
 
-$ docker push 
+# Then push to docker hub (requires credentials)
+$ docker push sakiladb/azure-sql-edge:latest sakiladb/azure-sql-edge:latest
 ```
