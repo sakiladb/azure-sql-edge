@@ -45,7 +45,7 @@ publishing the image to Docker Hub.
 
 Note that the image release version tracks the Azure SQL Edge release version. That is
 to say, if Azure SQL Edge `v7.0.0` is released, then we should publish
-a new image `sakiladb/azure-sql/edge:7.0.0`.
+a new image `sakiladb/azure-sql-edge:7.0.0`.
 
 ## Regenerate sakila.bak
 
