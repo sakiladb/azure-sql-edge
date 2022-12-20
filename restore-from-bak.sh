@@ -13,6 +13,7 @@ do
     if [ $? -eq 0 ]
     then
         echo "RESTORE backup completed"
+        echo "sakiladb/azure-sql-edge has successfully initialized."
         break
     else
         echo "DB is not ready yet..."
