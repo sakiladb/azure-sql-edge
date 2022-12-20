@@ -50,7 +50,9 @@ $ sqlcmd -S localhost -U sakila -d sakila -Q 'select * from actor'
 ## How to build/release the image
 
 ```shell
-$ docker build . -t sakiladb/azure-sql-edge:latest
+$ docker buildx build \
+ --platform linux/arm64/v8,linux/amd64 \
+ --tag sakiladb/azure-sql-edge:latest .
 
 # Then test the image via:
 $ docker run sakiladb/azure-sql-edge:latest
