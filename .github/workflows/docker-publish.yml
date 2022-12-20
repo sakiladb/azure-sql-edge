@@ -41,6 +41,7 @@ jobs:
         if: ${{ startsWith(github.ref, 'refs/tags/v') && github.event_name != 'pull_request' }}
         uses: sigstore/cosign-installer@v2.8.1
       - name: Check cosign install
+        if: ${{ startsWith(github.ref, 'refs/tags/v') && github.event_name != 'pull_request' }}
         run: cosign version
 
       - name: Set up QEMU
