@@ -11,15 +11,8 @@ By default these are created:
 - username / password: `sakila` / `p_ssW0rd`
 
 
-```shell script
+```shell
 docker run -p 1433:1433 -d sakiladb/azure-sql-edge:latest
-```
-
-Or use a specific version of SQL Server: see all available image tags
-on [Docker Hub](https://hub.docker.com/r/sakiladb/azure-sql-edge/tags). For example:
-
-```shell script
-docker run -p 1433:1433 -d sakiladb/azure-sql-edge:1.0.6
 ```
 
 Note that it may take some time for the container to boot up. Eventually the container's
@@ -28,9 +21,6 @@ docker logs will show:
 ```
 sakiladb/azure-sql-edge has successfully initialized.
 ```
-
-Note that even after this message is logged, it could take another few moments for
-it to become available (due to a final server restart etc.).
 
 If you have [sqlcmd](https://docs.microsoft.com/en-us/sql/tools/sqlcmd-utility) installed
 locally, verify that all is well:
@@ -47,25 +37,25 @@ $ sqlcmd -S localhost -U sakila -d sakila -Q 'select * from actor'
         5 | JOHNNY     | LOLLOBRIGIDA | 2006-02-15 04:34:33
 ```
 
-## How to build/release the image
+## CI
 
-```shell
-$ docker buildx build \
- --platform linux/arm64/v8,linux/amd64 \
- --tag sakiladb/azure-sql-edge:latest .
+To release a new version, open a PR against `master`; merge the PR; tag `master`, e.g. `v1.0.6`;
+then the GitHub [workflow](.github/workflows/docker-publish.yml) will do the rest, including
+publishing the image to Docker Hub.
 
-# Then test the image via:
-$ docker run sakiladb/azure-sql-edge:latest
-
-# Then push to docker hub (requires credentials)
-$ docker push sakiladb/azure-sql-edge:latest sakiladb/azure-sql-edge:latest
-```
+Note that the image release version tracks the Azure SQL Edge release version. That is
+to say, if Azure SQL Edge `v7.0.0` is released, then we should publish
+a new image `sakiladb/azure-sql/edge:7.0.0`.
 
 ## Regenerate sakila.bak
 
 When the container starts, it loads data from `sakila.bak`. However, the
 canonical DB is from the concatenation of the three numbered SQL files
-([1-sql-server-sakila-schema.sql](1-sql-server-sakila-schema.sql), etc.). If
+([1-sql-server-sakila-schema.sql](./1-sql-server-sakila-schema.sql), etc.).  If
 for some reason that `sakila.bak` file needs to be regenerated, use
-[restore-from-bak.sh](restore-from-bak.sh), and then commit the updated
+[restore-from-bak.sh](./restore-from-bak.sh), and then commit the updated
 `sakila.bak` to version control.
+
+> The [sql-server-sakila-delete-data.sql](./sql-server-sakila-delete-data.sql) and
+[sql-server-sakila-drop-objects.sql](./sql-server-sakila-drop-objects.sql) files are
+provided for completeness, but are not actually used by this image.

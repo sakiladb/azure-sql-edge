@@ -3,4 +3,5 @@
 ./restore-from-bak.sh &
 
 # This is the main process
+echo "Starting database..."
 /opt/mssql/bin/sqlservr

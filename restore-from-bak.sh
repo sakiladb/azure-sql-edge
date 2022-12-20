@@ -4,6 +4,8 @@
 # The server can take a while to start, so we execute the sqlcmd in
 # a loop.
 
+sleep 2
+
 export SQLCMDPASSWORD="p_ssW0rd"
 
 for i in {1..50};
