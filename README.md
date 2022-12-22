@@ -2,9 +2,12 @@
 
 Microsoft [Azure SQL Edge](https://hub.docker.com/_/microsoft-azure-sql-edge) docker
 image preloaded with the [Sakila](https://dev.mysql.com/doc/sakila/en/) example
-database (by way of [jooq](https://www.jooq.org/sakila)). This DB should behave
-largely like [Microsoft SQL Server](https://github.com/sakiladb/azure-sql-edge).
+database (by way of [jooq](https://www.jooq.org/sakila)).
 See on [Docker Hub](https://hub.docker.com/r/sakiladb/azure-sql-edge).
+
+This Azure SQL Edge database should behave largely like the Sakila
+[Microsoft SQL Server](https://github.com/sakiladb/sqlserver) image. However,
+Azure SQL Edge will run on both `arm64` and `amd64`, while SQL Server only runs on `amd64`.
 
 By default these are created:
 - database: `sakila`

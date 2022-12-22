@@ -12,12 +12,8 @@ COPY . /sakila
 RUN chmod -R 777 /sakila
 
 # Install sqlcmd, because it's not pre-installed.
-RUN apt update -y
-RUN apt install -y sudo curl git gnupg2 software-properties-common
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-RUN add-apt-repository "$(wget -qO- https://packages.microsoft.com/config/ubuntu/20.04/prod.list)"
-RUN apt-get update -y
-RUN apt-get install -y sqlcmd
+# Install sqlcmd, because it's not pre-installed.
+RUN ./install-sqlcmd.sh
 
 USER mssql
 
@@ -28,6 +24,3 @@ COPY ./signal-listener.sh /sakila/run.sh
 
 # Entrypoint overload to catch the ctrl+c and stop signals
 ENTRYPOINT ["/bin/bash", "/sakila/run.sh"]
-#CMD [ADD_THE_DEFAULT_DOCKER_CMD_IF_ANY]
-
-#CMD ["./entrypoint.sh"]
