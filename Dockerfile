@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/azure-sql-edge:1.0.6 AS sakila-base
+FROM mcr.microsoft.com/azure-sql-edge:1.0.7 AS sakila-base
 ENV ACCEPT_EULA="Y"
 ENV SA_PASSWORD="p_ssW0rd"
 ENV MSSQL_SA_PASSWORD="p_ssW0rd"
