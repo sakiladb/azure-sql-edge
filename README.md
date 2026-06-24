@@ -1,5 +1,12 @@
 # sakiladb/azure-sql-edge
 
+> [!WARNING]
+> **Retired.** Microsoft retired [Azure SQL Edge](https://learn.microsoft.com/en-us/lifecycle/products/azure-sql-edge)
+> on **30 September 2025**. This image is no longer maintained and will not receive updates, and this
+> repository is archived (read-only). Azure SQL Edge was a build of the SQL Server engine, so use
+> **[`sakiladb/sqlserver`](https://github.com/sakiladb/sqlserver)** instead. The existing image
+> remains on [Docker Hub](https://hub.docker.com/r/sakiladb/azure-sql-edge) for reference.
+
 Microsoft [Azure SQL Edge](https://hub.docker.com/_/microsoft-azure-sql-edge) docker
 image preloaded with the [Sakila](https://dev.mysql.com/doc/sakila/en/) example
 database (by way of [jooq](https://www.jooq.org/sakila)). This DB should behave
